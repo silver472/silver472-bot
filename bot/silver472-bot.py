@@ -2,20 +2,10 @@
 
 import telebot, logging, os
 from consts import users
-from tenacity import retry
-from tenacity import wait_chain
-from tenacity import wait_fixed
 
 WORKDIR = "./"
 logger = telebot.logger
 telebot.logger.setLevel(logging.DEBUG)
-# temporário | log para arquivo #
-fh = logging.FileHandler('logs/debug.log')
-fh.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S %z')
-fh.setFormatter(formatter)
-telebot.logger.addHandler(fh)
-# ----------------------------- #
 
 API_TOKEN = os.environ['TELEGRAM_TOKEN']
 
@@ -90,18 +80,32 @@ def command_naruto(m):
 		bot.send_chat_action(cid,'record_audio')
 		bot.send_voice(cid,"AwADBAADWwAD2tZMUF2yj_-0EK3YAg")
 
+@bot.message_handler(commands=['parabains'])
+def command_parabains(m):
+	cid = m.chat.id
+	if cid in known_users:
+		bot.send_chat_action(cid,'upload_video')
+		bot.send_message(cid,"Muitos PARABAINS\n\nhttps://www.youtube.com/watch?v=1Mcdh2Vf2Xk")
+
 @bot.message_handler(commands=['rolinhamole'])
 def command_rolinha(m):
 	cid = m.chat.id
 	if cid in known_users:
 		bot.send_chat_action(cid,'upload_video')
-		bot.send_message(cid,"Tá moli\n\nhttp://www.youtube.com/watch?v=Vc4xZ11ghnI")
+		bot.send_message(cid,"Tá moli\n\nhttp://www.youtube.com/watch?v=FqTOA_hprzw")
 
-################################### POLLING ###################################
+@bot.message_handler(commands=['vaiamerda'])
+def command_vaiamerda(m):
+	cid = m.chat.id
+	if cid in known_users:
+		bot.send_chat_action(cid,'upload_video')
+		bot.send_message(cid,"http://www.youtube.com/watch?v=ujGiICz_W5k")
 
-@retry(wait=wait_chain(*[wait_fixed(10) for i in range(5)] +
-						   [wait_fixed(20)]))
-def polling_forever():
-	bot.polling(none_stop=False, interval=0, timeout=20)
+@bot.message_handler(commands=['putaria'])
+def command_putaria(m):
+	cid = m.chat.id
+	if cid in known_users:
+		bot.send_chat_action(cid,'upload_video')
+		bot.send_message(cid,"https://youtu.be/psp6enyyrZs")
 
-polling_forever()
+bot.infinity_polling(skip_pending=True) # Skips old updates
